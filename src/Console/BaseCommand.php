@@ -23,7 +23,6 @@ use Cake\Event\EventDispatcherTrait;
 use Cake\Event\EventManager;
 use Cake\Event\EventManagerInterface;
 use Cake\Utility\Inflector;
-use InvalidArgumentException;
 
 /**
  * Base class for console commands.
@@ -301,7 +300,7 @@ abstract class BaseCommand implements CommandInterface, EventDispatcherInterface
     }
 
     /**
-     * Set the application's event manager.
+     * Set the global event manager.
      *
      * @param \Cake\Event\EventManagerInterface $eventManager The event manager to set.
      * @return $this
@@ -309,6 +308,9 @@ abstract class BaseCommand implements CommandInterface, EventDispatcherInterface
      */
     public function setEventManager(EventManagerInterface $eventManager)
     {
-        throw new InvalidArgumentException('You are not allowed to overwrite the global event manager.');
+        assert($eventManager instanceof EventManager);
+        EventManager::instance($eventManager);
+
+        return $this;
     }
 }
